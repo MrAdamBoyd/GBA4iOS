@@ -247,23 +247,34 @@ void AudioServicesPlaySystemSoundWithVibration(int, id, NSDictionary *);
 
 - (void)vibrate
 {
-    AudioServicesStopSystemSound(kSystemSoundID_Vibrate);
+    if ([[UIDevice currentDevice] hasHapticEngine]) {
+        
+        //Use the haptic engine
+        UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+        [generator impactOccurred];
     
-    int64_t vibrationLength = 30;
+    } else {
     
-    if ([[UIDevice currentDevice] platformType] == UIDevice5SiPhone)
-    {
-        // iPhone 5S has a weaker vibration motor, so we vibrate for 10ms longer to compensate
-        vibrationLength = 40;
+        //Use the regular vibration motor
+        AudioServicesStopSystemSound(kSystemSoundID_Vibrate);
+        
+        int64_t vibrationLength = 30;
+        
+        if ([[UIDevice currentDevice] platformType] == UIDevice5SiPhone)
+        {
+            // iPhone 5S has a weaker vibration motor, so we vibrate for 10ms longer to compensate
+            vibrationLength = 40;
+        }
+        
+        NSArray *pattern = @[@NO, @0, @YES, @(vibrationLength)];
+        
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        dictionary[@"VibePattern"] = pattern;
+        dictionary[@"Intensity"] = @1;
+        
+        AudioServicesPlaySystemSoundWithVibration(kSystemSoundID_Vibrate, nil, dictionary);
+        
     }
-    
-    NSArray *pattern = @[@NO, @0, @YES, @(vibrationLength)];
-    
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    dictionary[@"VibePattern"] = pattern;
-    dictionary[@"Intensity"] = @1;
-    
-    AudioServicesPlaySystemSoundWithVibration(kSystemSoundID_Vibrate, nil, dictionary);
 }
 
 - (NSSet *)buttonsForTouch:(UITouch *)touch
