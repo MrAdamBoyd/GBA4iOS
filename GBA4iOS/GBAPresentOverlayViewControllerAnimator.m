@@ -8,6 +8,7 @@
 
 #import "GBAPresentOverlayViewControllerAnimator.h"
 #import "GBAEmulationViewController.h"
+#import "UIViewController+Orientation.h"
 
 @implementation GBAPresentOverlayViewControllerAnimator
 
@@ -40,7 +41,7 @@
         }
         else
         {
-            if (UIInterfaceOrientationIsPortrait(fromViewController.interfaceOrientation))
+            if ([fromViewController portraitMode])
             {
                 frame.origin.y = CGRectGetHeight(frame);
             }
@@ -89,7 +90,7 @@
         }
         else
         {
-            if (UIInterfaceOrientationIsPortrait(fromViewController.interfaceOrientation))
+            if ([fromViewController portraitMode])
             {
                 frame.origin.y = CGRectGetHeight(frame);
             }

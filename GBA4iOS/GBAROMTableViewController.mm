@@ -25,6 +25,7 @@
 
 #import "UIAlertView+RSTAdditions.h"
 #import "UIActionSheet+RSTAdditions.h"
+#import "UIViewController+Orientation.h"
 
 #import "SSZipArchive.h"
 #import <DropboxSDK/DropboxSDK.h>
@@ -224,7 +225,7 @@ dispatch_queue_t directoryContentsChangedQueue() {
         
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
         {
-            if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+            if ([self portraitMode])
             {
                 frame.size.height = 29.0f;
             }

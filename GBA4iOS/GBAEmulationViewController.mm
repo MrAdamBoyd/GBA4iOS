@@ -35,6 +35,7 @@
 
 #import "UIActionSheet+RSTAdditions.h"
 #import "UIAlertView+RSTAdditions.h"
+#import "UIViewController+Orientation.h"
 #include <sys/sysctl.h>
 
 static GBAEmulationViewController *_emulationViewController;
@@ -299,7 +300,7 @@ static GBAEmulationViewController *_emulationViewController;
         }
         else
         {
-            if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+            if ([self portraitMode])
             {
                 imageView.image = [UIImage imageNamed:@"Default-Portrait"];
             }
@@ -314,9 +315,9 @@ static GBAEmulationViewController *_emulationViewController;
         
         CGAffineTransform transform = CGAffineTransformIdentity;
         
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+        if ([self portraitMode])
         {
-            if (self.interfaceOrientation == UIInterfaceOrientationPortrait)
+            if ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait)
             {
                 transform = CGAffineTransformMakeRotation(RADIANS(0.0f));
             }
@@ -327,7 +328,7 @@ static GBAEmulationViewController *_emulationViewController;
         }
         else
         {
-            if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft)
+            if ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeLeft)
             {
                 transform = CGAffineTransformMakeRotation(RADIANS(270.0f));
             }
@@ -1196,7 +1197,7 @@ static GBAEmulationViewController *_emulationViewController;
         imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         imageView.alpha = 0.0;
         
-        UIImage *image = [self blurredViewImageForInterfaceOrientation:self.interfaceOrientation drawController:NO];
+        UIImage *image = [self blurredViewImageForInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation] drawController:NO];
         imageView.image = image;
         
         [self.view insertSubview:imageView belowSubview:self.controllerView];
@@ -1266,7 +1267,7 @@ static GBAEmulationViewController *_emulationViewController;
     
     self.selectingSustainedButton = NO;
     
-    [self updateControllerSkinForInterfaceOrientation:self.interfaceOrientation];
+    [self updateControllerSkinForInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
     [self updateEmulatorScreenFrame]; // In case user connected/disconnected external controller
     
     [self resumeEmulation];
@@ -1992,7 +1993,7 @@ static GBAEmulationViewController *_emulationViewController;
 
 - (void)viewWillLayoutSubviews
 {
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    if ([self portraitMode])
     {
         [UIView animateWithDuration:0.4 animations:^{
             if (![[self.view constraints] containsObject:self.portraitBottomLayoutConstraint])
@@ -2191,14 +2192,14 @@ static GBAEmulationViewController *_emulationViewController;
 {
     [self updateFilter];
     
-    [self updateControllerSkinForInterfaceOrientation:self.interfaceOrientation];
+    [self updateControllerSkinForInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
     
     [self.view updateConstraintsIfNeeded];
     [self.view layoutIfNeeded];
     
     if (self.blurringContents)
     {
-        self.blurredContentsImageView.image = [self blurredViewImageForInterfaceOrientation:self.interfaceOrientation drawController:YES];
+        self.blurredContentsImageView.image = [self blurredViewImageForInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation] drawController:YES];
         self.blurredContentsImageView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
     }
     
@@ -2348,7 +2349,7 @@ static GBAEmulationViewController *_emulationViewController;
 
 - (void)updateFilter
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && [[UIScreen mainScreen] scale] < 3.0 && UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && self.rom.type == GBAROMTypeGBA && ![self isAirplaying])
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && [[UIScreen mainScreen] scale] < 3.0 && [self portraitMode] && self.rom.type == GBAROMTypeGBA && ![self isAirplaying])
     {
         [[GBAEmulatorCore sharedCore] applyEmulationFilter:GBAEmulationFilterLinear];
     }
@@ -2588,7 +2589,7 @@ static GBAEmulationViewController *_emulationViewController;
     [self.blurredContentsImageView removeFromSuperview];
     
     self.blurredContentsImageView = ({
-        UIImage *blurredImage = [self blurredViewImageForInterfaceOrientation:self.interfaceOrientation drawController:YES];
+        UIImage *blurredImage = [self blurredViewImageForInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation] drawController:YES];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:blurredImage];
         imageView.clipsToBounds = YES;
         imageView.translatesAutoresizingMaskIntoConstraints = YES;
