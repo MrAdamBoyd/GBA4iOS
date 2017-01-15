@@ -250,7 +250,8 @@ void AudioServicesPlaySystemSoundWithVibration(int, id, NSDictionary *);
     if ([[UIDevice currentDevice] hasHapticEngine]) {
         
         //Use the haptic engine
-        UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+        UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:[[NSUserDefaults standardUserDefaults] integerForKey:@"tapticLevel"]];
+        [generator prepare];
         [generator impactOccurred];
     
     } else {
