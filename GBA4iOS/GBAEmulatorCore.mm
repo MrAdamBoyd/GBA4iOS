@@ -471,7 +471,7 @@ void writeSaveFileForCurrentROMToDisk();
     logMsg("set screen MM size %dx%d", Gfx::viewMMWidth_, Gfx::viewMMHeight_);
 	currWin = mainWin;
     
-    //printf("Pixel size: %dx%d", Gfx::viewPixelWidth(), Gfx::viewPixelHeight());
+    printf("Pixel size: %dx%d", Gfx::viewPixelWidth(), Gfx::viewPixelHeight());
     
     if (self.eaglView == nil)
     {

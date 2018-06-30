@@ -2148,7 +2148,11 @@ static GBAEmulationViewController *_emulationViewController;
         {
             [UIView animateWithDuration:0.4 animations:^{
                 self.screenHorizontalCenterLayoutConstraint.constant = 0;
-                self.screenVerticalCenterLayoutConstraint.constant = 0;
+                CGFloat verticalCenterOffset = 0;
+                if (@available(iOS 11, *)) {
+                    verticalCenterOffset = self.view.safeAreaInsets.bottom;
+                }
+                self.screenVerticalCenterLayoutConstraint.constant = verticalCenterOffset;
             }];
             
             [[GBAEmulatorCore sharedCore] updateEAGLViewForSize:[self screenSizeForContainerSize:self.screenContainerView.bounds.size] screen:[UIScreen mainScreen]];

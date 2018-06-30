@@ -21,9 +21,9 @@ void fixFilePermissions(const char *path)
 	FsSys::cPath execPath;
 	string_printf(execPath, "%s/fixMobilePermission '%s'", Base::appPath, path);
 	//logMsg("executing %s", execPath);
-	int err = system(execPath);
-	if(err)
-	{
-		logWarn("error from fixMobilePermission helper: %d", err);
-	}
+    //int err = system(execPath);
+    //if(err)
+    //{
+    //    logWarn("error from fixMobilePermission helper: %d", err);
+    //}
 }

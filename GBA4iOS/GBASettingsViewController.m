@@ -523,7 +523,7 @@ NSString *const GBASettingsDropboxStatusChangedNotification = @"GBASettingsDropb
     }
     else if (indexPath.row == 1)
     {
-        username = @"pau1thor";
+        username = @"mradamboyd";
     }
     else if (indexPath.row == 2)
     {

@@ -246,7 +246,9 @@
 }
 
 - (BOOL) hasHapticEngine {
-    return (int)[[UIDevice currentDevice] valueForKey:@"_feedbackSupportLevel"] == 2;
+    NSNumber *feedbackSupportLevel =
+    (NSNumber *)[[UIDevice currentDevice] valueForKey:@"_feedbackSupportLevel"];
+    return feedbackSupportLevel.integerValue == 2;
 }
 
 - (UIDeviceFamily) deviceFamily
